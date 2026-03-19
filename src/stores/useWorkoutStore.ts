@@ -45,7 +45,7 @@ interface WorkoutState {
 }
 
 export const useWorkoutStore = create<WorkoutState>((set, get) => ({
-  active: null,
+  active: loadActive(),
   logs: [],
 
   restoreActive: () => {
