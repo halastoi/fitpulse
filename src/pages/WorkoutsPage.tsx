@@ -14,7 +14,7 @@ const MUSCLE_KEYS = ['chest', 'back', 'shoulders', 'legs', 'core', 'cardio', 'fu
 
 export function WorkoutsPage() {
   const { profile } = useUserStore()
-  const { active, startWorkout, completeSet, finishWorkout, abandonWorkout } = useWorkoutStore()
+  const { active, startWorkout, completeSet, finishWorkout, abandonWorkout, restoreActive } = useWorkoutStore()
   const { addXP, updateStreak } = useUserStore()
   const { t } = useI18n()
   const [exercises, setExercises] = useState<Exercise[]>([])
@@ -27,7 +27,8 @@ export function WorkoutsPage() {
 
   useEffect(() => {
     db.exercises.toArray().then(setExercises)
-  }, [])
+    restoreActive()
+  }, [restoreActive])
 
   const toggleMuscle = (muscle: MuscleGroup) => {
     setSelectedMuscles(prev =>
@@ -80,9 +81,7 @@ export function WorkoutsPage() {
     const currentSet = currentExercise.sets[active.currentSetIndex]
     const totalSets = active.exercises.reduce((acc, e) => acc + e.sets.length, 0)
     const completedSets = active.exercises.reduce((acc, e) => acc + e.sets.filter(s => s.completed).length, 0)
-    const isLastExercise = active.currentExerciseIndex === active.exercises.length - 1
-    const isLastSet = active.currentSetIndex === currentExercise.sets.length - 1
-    const allDone = isLastExercise && isLastSet && currentSet.completed
+    const allDone = active.exercises.every(ex => ex.sets.every(s => s.completed))
 
     return (
       <div className="px-4 py-6 space-y-4">

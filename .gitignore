@@ -27,3 +27,4 @@ certs/
 dist/
 dev-dist/
 certs/
+.vercel
