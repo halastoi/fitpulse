@@ -14,7 +14,7 @@ const MUSCLE_KEYS = ['chest', 'back', 'shoulders', 'legs', 'core', 'cardio', 'fu
 
 export function WorkoutsPage() {
   const { profile } = useUserStore()
-  const { active, startWorkout, completeSet, finishWorkout, abandonWorkout, restoreActive } = useWorkoutStore()
+  const { active, startWorkout, completeSet, finishWorkout, abandonWorkout } = useWorkoutStore()
   const { addXP, updateStreak } = useUserStore()
   const { t } = useI18n()
   const [exercises, setExercises] = useState<Exercise[]>([])
@@ -27,8 +27,7 @@ export function WorkoutsPage() {
 
   useEffect(() => {
     db.exercises.toArray().then(setExercises)
-    restoreActive()
-  }, [restoreActive])
+  }, [])
 
   const toggleMuscle = (muscle: MuscleGroup) => {
     setSelectedMuscles(prev =>
